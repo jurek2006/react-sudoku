@@ -1,0 +1,10 @@
+.numberPicker {
+    margin: 1em;
+}
+
+.numberPicker__btn {
+    float: left;
+    width: 50px;
+    height: 50px;
+    font-size: 40px;
+}
