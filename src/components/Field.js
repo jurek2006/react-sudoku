@@ -1,8 +1,14 @@
 import React, { Component } from "react";
 import { Consumer } from "../context";
 import classnames from "classnames";
+import PropTypes from "prop-types";
 
 export class Field extends Component {
+    static propTypes = {
+        row: PropTypes.number.isRequired,
+        col: PropTypes.number.isRequired
+    };
+
     handleSetFieldValue(row, col, value, dispatch) {
         dispatch({
             type: "SET_FIELD_VALUE",
