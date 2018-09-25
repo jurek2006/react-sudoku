@@ -1,16 +1,28 @@
 import React, { Component } from "react";
+import { Consumer } from "../context";
 
 export class Field extends Component {
     render() {
-        const { constantValue, value } = this.props;
+        const { constantValue, currentValue } = this.props;
         return (
-            <button
-                className="field"
-                disabled={constantValue ? true : false}
-                onClick={() => console.log(value)}
-            >
-                {constantValue ? constantValue : value > 0 ? value : "_"}
-            </button>
+            <Consumer>
+                {value => {
+                    const { currentNumber } = value;
+                    return (
+                        <button
+                            className="field"
+                            disabled={constantValue ? true : false}
+                            onClick={() => console.log(currentNumber)}
+                        >
+                            {constantValue
+                                ? constantValue
+                                : currentValue > 0
+                                    ? currentValue
+                                    : "_"}
+                        </button>
+                    );
+                }}
+            </Consumer>
         );
     }
 }

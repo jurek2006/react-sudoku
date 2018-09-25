@@ -7,7 +7,7 @@ export class NumberPicker extends Component {
         return (
             <div>
                 {[...Array(9)].map((x, i) => (
-                    <NumberPickerBtn key={i + 1} value={i + 1} />
+                    <NumberPickerBtn key={i + 1} btnNumber={i + 1} />
                 ))}
             </div>
         );
