@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Consumer } from "../context";
+import classnames from "classnames";
 
 export class NumberPickerBtn extends Component {
     handleClick = (btnNumber, dispatch) => {
@@ -19,14 +20,17 @@ export class NumberPickerBtn extends Component {
                         <div>
                             <button
                                 disabled={currentNumber === btnNumber}
-                                className="numberPicker__btn"
+                                className={classnames("numberPicker__btn", {
+                                    "numberPicker__btn--active":
+                                        currentNumber === btnNumber
+                                })}
                                 onClick={this.handleClick.bind(
                                     this,
                                     btnNumber,
                                     dispatch
                                 )}
                             >
-                                {btnNumber}
+                                {btnNumber !== 0 ? btnNumber : " "}
                             </button>
                         </div>
                     );

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Consumer } from "../context";
+import classnames from "classnames";
 
 export class Field extends Component {
     handleSetFieldValue(row, col, value, dispatch) {
@@ -18,7 +19,9 @@ export class Field extends Component {
                     const fieldData = board[row][col]; //fieldData has properties value and isConstant
                     return (
                         <button
-                            className="field"
+                            className={classnames("field", {
+                                "field--empty": fieldData.value === 0
+                            })}
                             disabled={fieldData.isConstant ? true : false}
                             onClick={this.handleSetFieldValue.bind(
                                 this,

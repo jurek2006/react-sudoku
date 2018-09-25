@@ -9,3 +9,7 @@
     height: 50px;
     font-size: 40px;
 }
+
+.field--empty {
+    color: transparent;
+}
