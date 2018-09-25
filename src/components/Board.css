@@ -13,3 +13,16 @@
 .field--empty {
     color: transparent;
 }
+
+.board__colFirst {
+    border-left-width: 5px;
+}
+.board__colLast {
+    border-right-width: 5px;
+}
+.board__rowFirst {
+    border-top-width: 5px;
+}
+.board__rowLast {
+    border-bottom-width: 5px;
+}

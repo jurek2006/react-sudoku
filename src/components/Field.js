@@ -20,7 +20,11 @@ export class Field extends Component {
                     return (
                         <button
                             className={classnames("field", {
-                                "field--empty": fieldData.value === 0
+                                "field--empty": fieldData.value === 0,
+                                board__colFirst: col % 3 === 0,
+                                board__colLast: (col + 1) % 9 === 0,
+                                board__rowFirst: row % 3 === 0,
+                                board__rowLast: (row + 1) % 9 === 0
                             })}
                             disabled={fieldData.isConstant ? true : false}
                             onClick={this.handleSetFieldValue.bind(
