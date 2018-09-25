@@ -2,23 +2,33 @@ import React, { Component } from "react";
 import { Consumer } from "../context";
 
 export class Field extends Component {
+    handleSetFieldValue(row, col, value, dispatch) {
+        dispatch({
+            type: "SET_FIELD_VALUE",
+            payload: { row: row, col: col, value: value }
+        });
+    }
+
     render() {
-        const { constantValue, currentValue } = this.props;
+        const { row, col } = this.props;
         return (
             <Consumer>
                 {value => {
-                    const { currentNumber } = value;
+                    const { board, dispatch, currentNumber } = value;
+                    const fieldData = board[row][col]; //fieldData has properties value and isConstant
                     return (
                         <button
                             className="field"
-                            disabled={constantValue ? true : false}
-                            onClick={() => console.log(currentNumber)}
+                            disabled={fieldData.isConstant ? true : false}
+                            onClick={this.handleSetFieldValue.bind(
+                                this,
+                                row,
+                                col,
+                                currentNumber,
+                                dispatch
+                            )}
                         >
-                            {constantValue
-                                ? constantValue
-                                : currentValue > 0
-                                    ? currentValue
-                                    : "_"}
+                            {fieldData.value > 0 ? fieldData.value : "_"}
                         </button>
                     );
                 }}
