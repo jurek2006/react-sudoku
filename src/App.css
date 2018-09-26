@@ -11,6 +11,6 @@
 }
 
 .numberPicker__btn--active {
-    background-color: #f00;
+    background-color: rgb(43, 174, 0);
     color: white;
 }
