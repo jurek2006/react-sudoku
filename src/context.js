@@ -3,64 +3,66 @@ import React, { Component } from "react";
 const Context = React.createContext();
 
 const checkConflicts = board => {
-    // funkcja sprawdzająca czy są konflikty na planszy - metodą brutalną
+    // function checks if there are value conflicts between fields' values (according to sudoku's rules)
+    // modifies board - fields with conflicts gets property hasConflict = true
+    // if there's not conflict anymore - property value is changed to false
+    // brutal force - can be refactored, but it's fast enough
 
-    const fieldHasConflict = (rowIndex, colIndex, board) => {
-        // pobranie wartości pola
+    const checkFieldConflict = (rowIndex, colIndex, board) => {
+        // function checks if there are value conflicts between given field's value and others fields
+        // gets field rowIndex and colIndex on board
+        // if there's a conflict fields gets property hasConflict = true
+
+        const markConflicts = (fieldArr, value) => {
+            // gets fieldArr which is array of fields (references) and value
+            // if there are multiple fields with given value they are modified and gets .hasConflict = true property
+            const conflictFields = fieldArr.filter(
+                fieldData => fieldData.value === value
+            );
+
+            if (conflictFields.length > 1) {
+                conflictFields.map(
+                    foundField => (foundField.hasConflict = true)
+                );
+            }
+        };
+
+        // not checking conflict for field if it's value is not between 1 to 9 (0 is empty field but other values are wrong)
         const value = board[rowIndex][colIndex].value;
         if (!(value > 0 && value < 10)) {
             return;
         }
 
-        // TUTAJ SPRAWDZENIE CZY WŁAŚNIE USTAWIONE POLE NIE MA KONFLIKTU Z JAKIMŚ INNYM (ZGODNIE Z ZASADAMI GRY)
-        // Jeśli pola mają konflikt to ustawienie dla każdego z nich hasConflict: true
-        // 1. Sprawdzenie wszystkich pól w tym samym wierszu
-        // wyfiltrowanie wszystkich pól w wierszu o tej samej wartości
-        const currRow = board[rowIndex].filter(
-            fieldData => fieldData.value === value
-        );
+        // 1. Check if there are multiple fields (including given field) with value in the same row
+        markConflicts(board[rowIndex], value);
 
-        if (currRow.length > 1) {
-            currRow.map(foundField => (foundField.hasConflict = true));
-        }
+        // 2. Check if there are multiple fields (including given field) with value in the same column
+        markConflicts(board.map(row => row[colIndex]), value);
 
-        // 2. Sprawdzenie wszystkich pól w tej samej kolumnie
-        const currCol = board
-            .map(row => row[colIndex])
-            .filter(fieldData => fieldData.value === value);
-
-        if (currCol.length > 1) {
-            currCol.map(foundField => (foundField.hasConflict = true));
-        }
-
-        // 3. Sprawdzenie wszystkich pól w tym samym "boxie" (można pominąć sprawdzone już wyżej z tego samego wiersza i kolumny)
-        const currBoxRow = Math.floor(rowIndex / 3);
-        const currBoxCol = Math.floor(colIndex / 3);
+        // 3. Check if there are multiple fields (including given field) with value in the same board "box"
+        // Sudoku board contains 9 "boxes" (squares), every "box" has 9 fields (in 3 rows and 3 cols)
         let currBox = [];
+        // create array of references to fields from the "box" where the field is located
         for (let i = 0; i < 3; i++) {
             currBox = currBox.concat(
-                board[currBoxRow * 3 + i].slice(
-                    currBoxCol * 3,
-                    currBoxCol * 3 + 3
+                board[Math.floor(rowIndex / 3) * 3 + i].slice(
+                    Math.floor(colIndex / 3) * 3,
+                    Math.ceil(colIndex / 3) * 3
                 )
             );
         }
-
-        const currBoxDoubles = currBox.filter(
-            fieldData => fieldData.value === value
-        );
-        if (currBoxDoubles.length > 1) {
-            currBoxDoubles.map(foundField => (foundField.hasConflict = true));
-        }
+        markConflicts(currBox, value);
     };
 
-    // wyczyszczenie wszystkich pól planszy z oznaczenia konfliktu
+    // cleans every field on board from conflict status, before checking conflicts again
+    // importat when field value changed and maybe some conflict doesn't exists anymore
     board.forEach(row => {
         row.forEach(field => (field.hasConflict = false));
     });
 
+    // checks every field on board if there is value conflict with other field
     board.forEach((row, rowInd) => {
-        row.forEach((col, colInd) => fieldHasConflict(rowInd, colInd, board));
+        row.forEach((col, colInd) => checkFieldConflict(rowInd, colInd, board));
     });
 };
 
@@ -79,7 +81,6 @@ const reducer = (state, action) => {
             if (!state.board[rowIndex][colIndex].isConstant) {
                 // if field value if is not blocked
                 state.board[rowIndex][colIndex].value = value;
-
                 checkConflicts(state.board);
             }
             return state;
