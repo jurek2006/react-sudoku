@@ -12,7 +12,7 @@ export class Field extends Component {
     handleSetFieldValue(row, col, value, dispatch) {
         dispatch({
             type: "SET_FIELD_VALUE",
-            payload: { row: row, col: col, value: value }
+            payload: { rowIndex: row, colIndex: col, value: value }
         });
     }
 
@@ -27,6 +27,7 @@ export class Field extends Component {
                         <button
                             className={classnames("field", {
                                 "field--empty": fieldData.value === 0,
+                                "field--hasConflict": fieldData.hasConflict,
                                 board__colFirst: col % 3 === 0,
                                 board__colLast: (col + 1) % 9 === 0,
                                 board__rowFirst: row % 3 === 0,
