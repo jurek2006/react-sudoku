@@ -14,3 +14,32 @@
     background-color: rgb(43, 174, 0);
     color: white;
 }
+
+.gameInfo {
+    text-align: center;
+}
+
+.gameInfo__number {
+    font-weight: bold;
+    color: #0f0;
+}
+
+.gameInfo__number--error {
+    color: #f00;
+}
+
+.success {
+    color: #f00;
+    margin: 2em 0;
+    text-align: center;
+}
+
+.success p {
+    font-size: 2em;
+}
+
+.success__big {
+    margin: 0;
+    font-size: 6em;
+    font-weight: 900;
+}

@@ -21,7 +21,7 @@ export class Field extends Component {
         return (
             <Consumer>
                 {value => {
-                    const { board, dispatch, currentNumber } = value;
+                    const { board, currentNumber, gameWon, dispatch } = value;
                     const fieldData = board[row][col]; //fieldData has properties value and isConstant
                     return (
                         <button
@@ -33,7 +33,9 @@ export class Field extends Component {
                                 board__rowFirst: row % 3 === 0,
                                 board__rowLast: (row + 1) % 9 === 0
                             })}
-                            disabled={fieldData.isConstant ? true : false}
+                            disabled={
+                                gameWon || fieldData.isConstant ? true : false //field cannot get new value when clicked if is blocked or game is finished (gameWon) - then all the fields are blocked
+                            }
                             onClick={this.handleSetFieldValue.bind(
                                 this,
                                 row,

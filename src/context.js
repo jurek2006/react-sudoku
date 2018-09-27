@@ -93,6 +93,20 @@ const checkConflicts = board => {
     return conflictsCounter;
 };
 
+const countFieldsWithValue = (value, board) => {
+    let fieldsCounter = 0;
+
+    board.forEach(row =>
+        row.forEach(field => {
+            if (field.value === 0) {
+                fieldsCounter++;
+            }
+        })
+    );
+
+    return fieldsCounter;
+};
+
 const reducer = (state, action) => {
     switch (action.type) {
         case "SET_CURRENT_NUMBER": {
@@ -108,15 +122,29 @@ const reducer = (state, action) => {
             if (!state.board[rowIndex][colIndex].isConstant) {
                 // if field value if is not blocked
                 state.board[rowIndex][colIndex].value = value;
-                state.conflictsCounter = checkConflicts(state.board);
+                state.conflictsCounter = checkConflicts(state.board); //check and marks fields on board with conflicts - stores number of conflicts
+                state.emptyFieldsCounter = countFieldsWithValue(0, state.board); //counts empty fields on board (empty field is field with value 0)
+
+                // check if user won the game (if there are no conflicts and no empty fields on the board)
+                state.gameWon =
+                    state.conflictsCounter + state.emptyFieldsCounter === 0
+                        ? true
+                        : false;
             }
             return state;
         }
         case "LOAD_GAME": {
-            // loads game data into board
+            // loads game board (given in action.payload)
+            const newBoardData = action.payload;
+
+            const conflictsCounter = checkConflicts(newBoardData); //check and marks fields on board with conflicts - stores number of conflicts
+            const emptyFieldsCounter = countFieldsWithValue(0, newBoardData); //counts empty fields on board (empty field is field with value 0)
             return {
                 ...state,
-                board: action.payload
+                board: newBoardData,
+                conflictsCounter,
+                emptyFieldsCounter,
+                gameWon: false
             };
         }
         default:
@@ -228,7 +256,9 @@ export class Provider extends Component {
             ]
         ],
         conflictsCounter: 0, //number of errors on the board at the time
+        emptyFieldsCounter: 81, //number of empty fields on board
         currentNumber: 6, //choosen number to place on the board
+        gameWon: false,
         dispatch: action => this.setState(state => reducer(state, action))
     };
     render() {

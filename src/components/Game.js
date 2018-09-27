@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Board } from "./Board";
 import { NumberPicker } from "./NumberPicker";
 import { Consumer } from "../context";
+import { GameInfo } from "./GameInfo";
 export class Game extends Component {
     handleLoadGame = dispatch => {
         const convertGameStringsToBoardaData = gameData => {
@@ -22,7 +23,8 @@ export class Game extends Component {
 
         const gameData = {
             quizz:
-                "004300209005009001070060043006002087190007400050083000600000105003508690042910300",
+                "864371259325849760971265843436192587198657432257483916689734125713528694542916378",
+            // "004300209005009001070060043006002087190007400050083000600000105003508690042910300",
             solution:
                 "864371259325849761971265843436192587198657432257483916689734125713528694542916378"
         };
@@ -36,7 +38,12 @@ export class Game extends Component {
         return (
             <Consumer>
                 {value => {
-                    const { dispatch } = value;
+                    const {
+                        dispatch,
+                        emptyFieldsCounter,
+                        conflictsCounter,
+                        gameWon
+                    } = value;
                     return (
                         <React.Fragment>
                             <button
@@ -45,8 +52,13 @@ export class Game extends Component {
                                     dispatch
                                 )}
                             >
-                                Wczytaj grę
+                                Nowa gra
                             </button>
+                            <GameInfo
+                                emptyFieldsCounter={emptyFieldsCounter}
+                                conflictsCounter={conflictsCounter}
+                                gameWon={gameWon}
+                            />
                             <Board />
                             <NumberPicker />
                         </React.Fragment>
