@@ -128,7 +128,8 @@ export class Game extends Component {
                         dispatch,
                         emptyFieldsCounter,
                         conflictsCounter,
-                        gameWon
+                        gameWon,
+                        numbersLeftToBePlaced
                     } = value;
                     return (
                         <React.Fragment>
@@ -144,6 +145,7 @@ export class Game extends Component {
                                 emptyFieldsCounter={emptyFieldsCounter}
                                 conflictsCounter={conflictsCounter}
                                 gameWon={gameWon}
+                                numbersLeftToBePlaced={numbersLeftToBePlaced}
                             />
                             <Board />
                             <NumberPicker />

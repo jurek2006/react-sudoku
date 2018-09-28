@@ -98,13 +98,24 @@ const countFieldsWithValue = (value, board) => {
 
     board.forEach(row =>
         row.forEach(field => {
-            if (field.value === 0) {
+            if (field.value === value) {
                 fieldsCounter++;
             }
         })
     );
 
     return fieldsCounter;
+};
+
+const countNumbersLeft = board => {
+    // counts (and returns) how many times each value (from 1 to 9) is missing to complete the board
+    // in sudoku rules (9x9 board) each number has to be exactly 9 times on the board
+    // value equals index - 1 (for value 1 is numbersLeft[0], 2 -> numbersLeft[1] ect.)
+    const numbersLeft = [];
+    for (let i = 1; i < 10; i++) {
+        numbersLeft[i - 1] = 9 - countFieldsWithValue(i, board);
+    }
+    return numbersLeft;
 };
 
 const reducer = (state, action) => {
@@ -130,6 +141,8 @@ const reducer = (state, action) => {
                     state.conflictsCounter + state.emptyFieldsCounter === 0
                         ? true
                         : false;
+
+                state.numbersLeftToBePlaced = countNumbersLeft(state.board);
             }
             return state;
         }
@@ -144,6 +157,7 @@ const reducer = (state, action) => {
                 board: newBoardData,
                 conflictsCounter,
                 emptyFieldsCounter,
+                numbersLeftToBePlaced: countNumbersLeft(newBoardData),
                 gameWon: false
             };
         }
@@ -258,6 +272,7 @@ export class Provider extends Component {
         conflictsCounter: 0, //number of errors on the board at the time
         emptyFieldsCounter: 81, //number of empty fields on board
         currentNumber: 6, //choosen number to place on the board
+        numbersLeftToBePlaced: [9, 9, 9, 9, 9, 9, 9, 9, 9], //how many values from each number are still missing on the board (for value 1 is numbersLeftToBePlaced[0], 2 -> [1] ect.)
         gameWon: false,
         dispatch: action => this.setState(state => reducer(state, action))
     };

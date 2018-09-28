@@ -3,7 +3,12 @@ import classnames from "classnames";
 
 export class GameInfo extends Component {
     render() {
-        const { emptyFieldsCounter, conflictsCounter, gameWon } = this.props;
+        const {
+            emptyFieldsCounter,
+            conflictsCounter,
+            gameWon,
+            numbersLeftToBePlaced
+        } = this.props;
         return (
             <div>
                 {gameWon && (
@@ -12,7 +17,7 @@ export class GameInfo extends Component {
                         <p>Sudoku rozwiązane</p>
                     </div>
                 )}
-                <p className="gameInfo">
+                <div className="gameInfo">
                     Wolnych pól:{" "}
                     <span
                         className={classnames("gameInfo__number", {
@@ -29,7 +34,13 @@ export class GameInfo extends Component {
                     >
                         {conflictsCounter}
                     </span>
-                </p>
+                    <p>Pozostało do umieszczenia:</p>
+                    {numbersLeftToBePlaced.map((amount, value) => (
+                        <p>
+                            Wartość {value + 1}: {amount}
+                        </p>
+                    ))}
+                </div>
             </div>
         );
     }
