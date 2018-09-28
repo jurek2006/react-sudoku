@@ -28,6 +28,9 @@ export class Field extends Component {
                             className={classnames("field", {
                                 "field--empty": fieldData.value === 0,
                                 "field--hasConflict": fieldData.hasConflict,
+                                "field--equalsCurrentNumber":
+                                    fieldData.value === currentNumber &&
+                                    currentNumber !== 0, //highlight field on board if it's value equals currently picked number (not for 0 which is empty)
                                 board__colFirst: col % 3 === 0,
                                 board__colLast: (col + 1) % 9 === 0,
                                 board__rowFirst: row % 3 === 0,
